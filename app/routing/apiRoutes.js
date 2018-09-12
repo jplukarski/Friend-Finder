@@ -16,23 +16,31 @@ module.exports = function (app) {
             newFriend.push(parseInt(friend.scores[i]))
         }
 
-        console.log(newFriend);
-
         //Cycle through the entire existing friends to grab the scores of each existing friend
         for (i = 0; i < friendData.length; i++) {
             existingFriends.push(friendData[i].scores)
         };
-
-        var a1 = [5, 1, 4, 4, 5, 1, 2, 5, 4, 1];
-        var a2 = [3, 2, 6, 4, 5, 1, 2, 5, 4, 1]
-
-        for (i = 0; i < a1.length; i++) {
-
+        function getSum(total, num) {
+            return total + num;
+        };
+        var totalDifference = 100000000;
+        var matchingIndex = 0;
+        for (index = 0; index < existingFriends.length; index++) {
+            var diff = [];
+            for (i = 0; i < newFriend.length; i++) {
+                diff.push(Math.abs(newFriend[i] - existingFriends[index][i]));
+                if (diff.reduce(getSum) < totalDifference) {
+                    totalDifference = diff.reduce(getSum);
+                    matchingIndex = index
+                }
+            }
         }
 
         console.log(existingFriends);
         friendData.push(friend);
 
-        res.json(friend);
+        res.json(friendData[matchingIndex]);
     });
 };
+
+
